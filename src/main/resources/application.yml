@@ -1,0 +1,33 @@
+spring:
+  profiles:
+    active: dev
+  application:
+    name: arthub
+  mvc:
+    problemdetails:
+      enabled: true
+
+  # database
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+    validate-migration-naming: true
+  data:
+    rest:
+      base-path: "/api"
+
+server:
+  error:
+    include-binding-errors: always
+    include-message: always
+    whitelabel:
+      enabled: false
+  servlet:
+    context-path: "/api"
+
+app:
+  registration:
+    role: CUSTOMER

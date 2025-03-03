@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:25432/arthub
+    username: postgresql
+    password: secret
+
+app:
+  security:
+    jwt:
+      secret: secret-will-be-stored-in-secrets
+      expiration: 10m
+      refreshExpiration: 1d

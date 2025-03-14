@@ -23,10 +23,6 @@ public class AuthorizationWrappedException extends BusinessLogicException {
         return "authorization.wrapped";
     }
 
-    public HttpHeaders getHttpHeaders() {
-        return new HttpHeaders();
-    }
-
     @Override
     public HttpStatusCode getStatusCode() {
         return httpStatus;

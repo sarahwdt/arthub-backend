@@ -12,7 +12,7 @@ public interface UserRepository extends Repository<User, Integer> {
     User save(User user);
 
     @EntityGraph(attributePaths = {"role", "role.authorities", "credentials"})
-    Optional<User> findWithRoleAndCredentialsByUsername(String username);
+    Optional<User> findWithRoleAndCredentialsByEmail(String email);
 
     Optional<User> findById(int id);
 }

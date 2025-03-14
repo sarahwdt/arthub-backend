@@ -69,7 +69,7 @@ public abstract class AbstractE2eTest {
 
     protected CharSequence authAs(Privilege... privileges) {
         Set<Privilege> privilegeSet = new HashSet<>(Arrays.asList(privileges));
-        return jwtService.generateToken(new JwtPrincipal(1, getUser(), privilegeSet));
+        return jwtService.generateToken(new JwtPrincipal(1, getEmail(), privilegeSet));
     }
 
     protected RequestSpecification authenticated(Privilege... privileges) {
@@ -78,10 +78,6 @@ public abstract class AbstractE2eTest {
 
     protected RequestSpecification authenticated() {
         return authenticated(Privilege.values());
-    }
-
-    protected String getUser() {
-        return testProperties.getUser();
     }
 
     protected String getEmail() {

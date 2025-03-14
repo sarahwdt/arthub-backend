@@ -6,6 +6,6 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 @RepositoryRestResource
-@PreAuthorize("hasAuthority('ADMIN')")
+@PreAuthorize("hasAuthority('READ_CLIENTS')")
 public interface ClientRepository extends JpaRepository<Client, Integer> {
 }

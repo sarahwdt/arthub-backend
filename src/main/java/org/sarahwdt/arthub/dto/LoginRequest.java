@@ -7,7 +7,7 @@ public record LoginRequest(
 
         @NotNull
         @NonNull
-        String username,
+        String email,
 
         @NotNull
         @NonNull

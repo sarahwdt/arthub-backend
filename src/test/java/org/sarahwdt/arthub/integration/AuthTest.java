@@ -18,7 +18,7 @@ public class AuthTest extends AbstractE2eTest {
 
     @Test
     void Should_ReceiveValidAccessTokenResponse_When_LoginSuccessfully() {
-        Object request = new LoginRequest(getUser(), getPassword().toCharArray());
+        Object request = new LoginRequest(getEmail(), getPassword().toCharArray());
         ValidatableResponse response = request()
                 .body(request, objectMapper)
                 .post("/auth/login")
@@ -30,7 +30,7 @@ public class AuthTest extends AbstractE2eTest {
         try {
             JwtPrincipal jwtPrincipal = jwtService.extractValidPrincipal(accessToken);
             assertThat(jwtPrincipal.id()).isEqualTo(1);
-            assertThat(jwtPrincipal.username()).isEqualTo(getUser());
+            assertThat(jwtPrincipal.email()).isEqualTo(getEmail());
             assertThat(jwtPrincipal.authorities()).isEmpty();
         } catch (JwtException e) {
             fail("Invalid JWT token", e);
@@ -66,7 +66,7 @@ public class AuthTest extends AbstractE2eTest {
 
     @Test
     void Should_ReceiveNewAccessToken_When_RefreshSuccessful() throws InterruptedException {
-        Object request = new LoginRequest(getUser(), getPassword().toCharArray());
+        Object request = new LoginRequest(getEmail(), getPassword().toCharArray());
         ValidatableResponse response = request()
                 .body(request, objectMapper)
                 .post("/auth/login")
@@ -98,7 +98,7 @@ public class AuthTest extends AbstractE2eTest {
         try {
             JwtPrincipal jwtPrincipal = jwtService.extractValidPrincipal(accessToken);
             assertThat(jwtPrincipal.id()).isEqualTo(1);
-            assertThat(jwtPrincipal.username()).isEqualTo(getUser());
+            assertThat(jwtPrincipal.email()).isEqualTo(getEmail());
             assertThat(jwtPrincipal.authorities()).isEmpty();
         } catch (JwtException e) {
             fail("Invalid JWT token", e);

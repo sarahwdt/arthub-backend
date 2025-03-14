@@ -38,7 +38,7 @@ public class JwtService {
     public CharSequence generateToken(JwtPrincipal principal) {
         return Jwts.builder()
                 .json(serializer)
-                .subject(principal.username())
+                .subject(principal.email())
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + properties.getExpiration().toMillis()))
                 .signWith(getSigningKey(), Jwts.SIG.HS256)
@@ -50,14 +50,14 @@ public class JwtService {
     public JwtPrincipal extractValidPrincipal(CharSequence token) throws JwtException {
         Claims claims = Jwts.parser().verifyWith(getSigningKey()).json(deserializer).build()
                 .parseSignedClaims(CharBuffer.wrap(token)).getPayload();
-        String username = claims.getSubject();
+        String email = claims.getSubject();
         Integer id = claims.get(ID, Integer.class);
         Set<Privilege> authorities = claims.get(AUTHORITIES, PrivilegeSet.class);
         Date expiration = claims.getExpiration();
-        if (username == null || id == null || authorities == null || expiration == null) {
+        if (email == null || id == null || authorities == null || expiration == null) {
             throw new JwtException("Invalid token");
         }
-        return new JwtPrincipal(id, username, authorities);
+        return new JwtPrincipal(id, email, authorities);
     }
 
     private static class PrivilegeSet extends HashSet<Privilege> {

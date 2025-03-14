@@ -10,7 +10,7 @@ public record JwtPrincipal(
         int id,
 
         @NonNull
-        String username,
+        String email,
 
         @NonNull
         Set<Privilege> authorities
@@ -18,6 +18,6 @@ public record JwtPrincipal(
 
     @Override
     public String getName() {
-        return username;
+        return email;
     }
 }

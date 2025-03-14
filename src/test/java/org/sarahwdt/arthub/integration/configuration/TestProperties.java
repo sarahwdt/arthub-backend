@@ -7,8 +7,6 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesBindin
 @Getter
 @Setter(onMethod_ = @ConfigurationPropertiesBinding)
 public class TestProperties {
-    private String user = "admin";
-
     private String email = "admin@mail.com";
 
     private String password = "12345678";

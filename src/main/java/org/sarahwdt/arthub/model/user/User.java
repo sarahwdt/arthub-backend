@@ -16,8 +16,6 @@ import java.util.Set;
 @Getter
 @Setter
 public class User extends AbstractAuditable<Integer> {
-    @Column(unique = true, nullable = false, length = 32)
-    private String username;
 
     @Column(unique = true, nullable = false, length = 320)
     private String email;

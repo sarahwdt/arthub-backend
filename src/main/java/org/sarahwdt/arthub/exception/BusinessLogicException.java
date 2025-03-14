@@ -22,16 +22,16 @@ public abstract class BusinessLogicException extends RuntimeException implements
 
     @Override
     public String getTypeMessageCode() {
-        return "problemDetails.type." + messageCodeCategory() + "." + messageCodeQualifier();
+        return "problemDetail.type." + messageCodeCategory() + "." + messageCodeQualifier();
     }
 
     @Override
     public String getTitleMessageCode() {
-        return "problemDetails.title." + messageCodeCategory() + "." + messageCodeQualifier();
+        return "problemDetail.title." + messageCodeCategory() + "." + messageCodeQualifier();
     }
 
     @Override
     public String getDetailMessageCode() {
-        return "problemDetails.detail." + messageCodeCategory() + "." + messageCodeQualifier();
+        return "problemDetail." + messageCodeCategory() + "." + messageCodeQualifier();
     }
 }

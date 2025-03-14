@@ -15,13 +15,19 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 
 import java.nio.CharBuffer;
 import java.util.Arrays;
 
+import static org.sarahwdt.arthub.util.I18nPlaceholders.Validation.PASSWORDS_DOESNT_MATCH;
+import static org.sarahwdt.arthub.util.I18nPlaceholders.Validation.PASSWORD_IS_INCORRECT;
+
 @Service
 @RequiredArgsConstructor
 public class CurrentUserService {
+
     private final PasswordEncoder passwordEncoder;
 
     private final UserRepository userRepository;
@@ -30,12 +36,18 @@ public class CurrentUserService {
     private final RoleService roleService;
     private final PasswordValidationService passwordValidationService;
 
-    public void changePassword(ChangePasswordRequest request) {
-        if (!Arrays.equals(request.newPassword(), request.confirmPassword())) {
-            throw ValidationException.passwordsDoesntMatch();
+    public void changePassword(ChangePasswordRequest request, BindingResult bindingResult) {
+        if (!Arrays.equals(request.newPassword(), request.passwordConfirmation())) {
+            bindingResult.addError(new FieldError(
+                    bindingResult.getObjectName(), "passwordConfirmation", null, false,
+                    new String[]{PASSWORDS_DOESNT_MATCH}, null, null));
         }
 
-        passwordValidationService.validatePassword(request.newPassword());
+        passwordValidationService.validatePassword(request.newPassword(), bindingResult, "newPassword");
+        // if old password is null further validations have no sense
+        if (request.oldPassword() == null) {
+            throw ValidationException.create(bindingResult);
+        }
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (!(authentication != null && authentication.getPrincipal() != null
@@ -50,35 +62,22 @@ public class CurrentUserService {
         CharSequence oldPassword = CharBuffer.wrap(request.oldPassword());
 
         if (!passwordEncoder.matches(oldPassword, currentPasswordHash)) {
-            throw ValidationException.oldPasswordIsIncorrect();
+            bindingResult.addError(new FieldError(
+                    bindingResult.getObjectName(), "oldPassword", null, false,
+                    new String[]{PASSWORD_IS_INCORRECT}, null, null));
+        }
+
+        if (bindingResult.hasErrors()) {
+            throw ValidationException.create(bindingResult);
+        }
+
+        // check that new password is non-null
+        if (request.newPassword() == null) {
+            throw new IllegalStateException("New password is required, but newPassword is null");
         }
 
         String newPasswordHash = passwordEncoder.encode(CharBuffer.wrap(request.newPassword()));
         credentials.setPassword(newPasswordHash);
         credentialsRepository.save(credentials);
-    }
-
-    public UserResponse registration(RegistrationRequest request) {
-        if (!Arrays.equals(request.password(), request.confirmPassword())) {
-            throw ValidationException.passwordsDoesntMatch();
-        }
-
-        passwordValidationService.validatePassword(request.password());
-
-        User user = new User();
-        user.setUsername(request.username());
-        user.setEmail(request.email());
-
-        Credentials credentials = new Credentials();
-        credentials.setPassword(passwordEncoder.encode(CharBuffer.wrap(request.password())));
-        credentials.setUser(user);
-        user.setCredentials(credentials);
-
-        Role role = roleService.getRoleForNewlyRegistered();
-        user.setRole(role);
-
-        user = userRepository.save(user);
-        RoleResponse roleResponse = new RoleResponse(role.getName(), role.getAuthorities());
-        return new UserResponse(user.getUsername(), user.getEmail(), roleResponse);
     }
 }

@@ -8,21 +8,17 @@ import org.springframework.lang.NonNull;
 
 public record RegistrationRequest(
 
-        @Size(min = 3, max = 32)
-        @NotBlank
-        @NonNull
-        String username,
-
         @Email
         @Size(max = 320)
+        @NotBlank
         @NonNull
         String email,
 
-        @NotNull
+        @NotNull(message = "{jakarta.validation.constraints.NotBlank.message}")
         @NonNull
         char[] password,
 
-        @NotNull
+        @NotNull(message = "{jakarta.validation.constraints.NotBlank.message}")
         @NonNull
-        char[] confirmPassword
+        char[] passwordConfirmation
 ) {}

@@ -9,13 +9,11 @@ spring:
       - classpath:db/migration
       - classpath:db/testdata
     placeholders:
-      app.test.user: ${app.test.user}
       app.test.email: ${app.test.email}
       app.test.password: ${app.test.password}
       app.test.role: ${app.test.role}
 app:
   test:
-    user: rus
     email: admin@mail.com
     password: HardPassWord1!
     role: ADMIN

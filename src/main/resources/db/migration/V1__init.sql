@@ -1,6 +1,6 @@
 CREATE TABLE clients
 (
-    id                  SERIAL                      NOT NULL,
+    id                  SERIAL                     NOT NULL,
     created_by_id       BIGINT,
     created_date        TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     last_modified_by_id BIGINT,
@@ -47,7 +47,6 @@ CREATE TABLE users
     created_date        TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     last_modified_by_id BIGINT,
     last_modified_date  TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    username            VARCHAR(32)                 NOT NULL,
     email               VARCHAR(320)                NOT NULL,
     role_name           VARCHAR(32)                 NOT NULL,
     CONSTRAINT pk_users PRIMARY KEY (id)
@@ -55,9 +54,6 @@ CREATE TABLE users
 
 ALTER TABLE users
     ADD CONSTRAINT uc_users_email UNIQUE (email);
-
-ALTER TABLE users
-    ADD CONSTRAINT uc_users_username UNIQUE (username);
 
 ALTER TABLE clients
     ADD CONSTRAINT FK_CLIENTS_ON_CREATEDBY FOREIGN KEY (created_by_id) REFERENCES users (id);

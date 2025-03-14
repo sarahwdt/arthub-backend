@@ -1,20 +1,20 @@
 package org.sarahwdt.arthub.dto;
 
 import jakarta.validation.constraints.NotNull;
-import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 
 public record ChangePasswordRequest(
 
         @NotNull
-        @NonNull
+        @Nullable
         char[] oldPassword,
 
         @NotNull
-        @NonNull
+        @Nullable
         char[] newPassword,
 
         @NotNull
-        @NonNull
-        char[] confirmPassword
+        @Nullable
+        char[] passwordConfirmation
 ) {
 }
